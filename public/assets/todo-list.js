@@ -1,3 +1,6 @@
+const jsdom = require("jsdom");
+
+
 $(document).ready(function(){
 
   $('form').on('submit', function(){
@@ -32,3 +35,5 @@ $(document).ready(function(){
   });
 
 });
+
+

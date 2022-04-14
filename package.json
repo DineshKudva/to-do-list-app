@@ -18,8 +18,10 @@
   "homepage": "https://github.com/DineshKudva/to-do-list-app#readme",
   "dependencies": {
     "body-parser": "^1.20.0",
-    "ejs": "^3.1.6",
+    "ejs": "^3.0.2",
     "express": "^4.17.3",
+    "jquery": "^3.6.0",
+    "jsdom": "^19.0.0",
     "nodemon": "^2.0.15"
   }
 }
