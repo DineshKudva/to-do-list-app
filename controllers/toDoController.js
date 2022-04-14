@@ -1,30 +1,44 @@
-var bodyParser=require('body-parser');
+var bodyParser = require("body-parser");
+var mongoose = require("mongoose");
 
-var urlEncodedParser=bodyParser.urlencoded({extended:false});
+mongoose.connect(
+  "mongodb+srv://dinesh19:c2zjkgKvCxxTaHZp@nodetuts.djld1.mongodb.net/test?retryWrites=true&w=majority"
+);
 
-var data=[{item:'get milk'},{item:'walk dog'},{item:'kick some coding ass'}];
+var todoSchema = new mongoose.Schema({
+  item: String,
+});
 
+var Todo = mongoose.model("Todo", todoSchema);
 
-module.exports = function(app) {
+var urlEncodedParser = bodyParser.urlencoded({ extended: false });
 
-  
+// var data=[{item:'get milk'},{item:'walk dog'},{item:'kick some coding ass'}];
+
+module.exports = function (app) {
   app.get("/todo", (req, res) => {
-        res.render('todo',{todos : data});
+    //get data from mongodb and pass it to the view
+    Todo.find({}, (err, data) => {
+      if (err) throw err;
+      res.render("todo", { todos: data });
+    });
   });
 
-  app.post("/todo",urlEncodedParser, (req, res) => {
-      console.log(req.body);
-      data.push(req.body);
-      res.json(data);
+  app.post("/todo", urlEncodedParser, (req, res) => {
+    //get data from the view and add it to mongodb
 
+    var todo=new Todo(req.body).save((err, data) => {
+      if (err) throw err;
+      res.json(data);
+    });
+    
   });
 
   app.delete("/todo/:item", (req, res) => {
-      data=data.filter(function(todo){
-        return todo.item.replace(/ /g,'-')!=req.params.item;
-      });
+    //delete the requested item from mongodb
+    Todo.find({ item: req.params.item.replace(/\-/g, " ") }).remove((err, data) => {
+      if (err) throw err;
       res.json(data);
+    });
   });
 }
-
-

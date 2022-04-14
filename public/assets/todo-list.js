@@ -1,5 +1,3 @@
-const jsdom = require("jsdom");
-
 
 $(document).ready(function(){
 
